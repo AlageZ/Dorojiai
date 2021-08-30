@@ -1834,6 +1834,7 @@ class App:
                 if (pyxel.frame_count-self.scene_changed_frame)%4 == 0:
                     pyxel.play(3,13)
             else:
+                pyxel.stop()
                 l = pyxel.frame_count-self.scene_changed_frame
                 if l >= 10:
                     pyxel.text(pyxel.width/2-len("G A M E  O V E R")*4/2,30,"G A M E  O V E R",9)
