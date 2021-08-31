@@ -376,22 +376,24 @@ class NagePick:
     def __init__(self,parent):
         self.parent = parent
         self.deg = parent.deg
-        self.posZ = parent.posZ+2
-        self.posX = parent.posX
-        self.posY = parent.posY
-        self.sizeX = 2
-        self.sizeY = 30
-        self.sizeZ = 30
+        self.posposZ = parent.posZ+2
+        self.posposX = parent.posX
+        self.posposY = parent.posY
+        self.sizesizeX = 2
+        self.sizesizeY = 30
+        self.sizesizeZ = 30
         self.rotlevel = 45
         self.speedX = DEG_TO_FORMATED_INDS_DICT[self.deg][0]*5
         self.speedY = DEG_TO_FORMATED_INDS_DICT[self.deg][1]*5
         self.moving = True
+        self.posmover()
     def update(self):
         if self.moving:
             self.rotlevel += 90
             self.rotlevel %= 360
-            self.posX += self.speedX
-            self.posY += self.speedY
+            self.posposX += self.speedX
+            self.posposY += self.speedY
+            self.posmover()
             f = False
             for i in rock_list:
                 if check_objscross(self,i):
@@ -417,7 +419,30 @@ class NagePick:
             hw = -1
         if self.moving and pyxel.frame_count %10 == 0:
             pyxel.play(3,6)
-        pyxel.blt(self.posX-15-self.parent.parent.scrollX,self.posY-self.parent.parent.scrollY-self.posZ-self.sizeZ,0,205,35,30*ww,30*hw,3)
+        pyxel.blt(self.posposX-15-self.parent.parent.scrollX,self.posposY-self.parent.parent.scrollY-self.posposZ-self.sizesizeZ,0,205,35,30*ww,30*hw,3)
+
+    def posmover(self):
+        posxg = DEG_TO_FORMATED_INDS_DICT[self.deg][0]*self.sizesizeY/4
+        posyg = DEG_TO_FORMATED_INDS_DICT[self.deg][1]*self.sizesizeY/4
+        self.sizeZ  = self.sizesizeZ/2
+        self.sizeX = self.sizesizeX/2
+        self.sizeY = self.sizesizeY/2
+        if self.rotlevel == 45:
+            self.posX = self.posposX+posxg
+            self.posY = self.posposY-posyg
+            self.posZ = self.posposZ+self.sizesizeZ/4*3
+        elif self.rotlevel == 135:
+            self.posX = self.posposX+posxg
+            self.posY = self.posposY+posyg
+            self.posZ = self.posposZ+self.sizesizeZ/4
+        elif self.rotlevel == 225:
+            self.posX = self.posposX-posxg
+            self.posY = self.posposY+posyg
+            self.posZ = self.posposZ+self.sizesizeZ/4
+        elif self.rotlevel == 315:
+            self.posX = self.posposX-posxg
+            self.posY = self.posposY-posyg
+            self.posZ = self.posposZ+self.sizesizeZ/4*3
 
 
 class Stone:
@@ -556,8 +581,8 @@ class Rock2:
             0,96,160,64,64,3)
     def collsreload(self):
         self.colls = [
-            Collisioner(self,0,0,0,50,14,10,0),
-            Collisioner(self,5,0,10,30,12,15,0),
+            Collisioner(self,0,0,0,50,12,10,0),
+            Collisioner(self,5,0,10,30,11,15,0),
             Collisioner(self,10,0,25,20,10,10,0),
             Collisioner(self,10,0,35,10,5,10,0),
         ]
@@ -949,7 +974,7 @@ class Mudfrog:
     def __init__(self,parent):
         self.landon = parent.aether
         self.sizeZ = 13
-        self.sizeY = 28
+        self.sizeY = 24
         self.sizeX = 22
         self.speedZ = 0
         self.posX = 0
