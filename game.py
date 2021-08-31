@@ -212,9 +212,9 @@ PALETTE = [
 ]
 SUNRAKU_MOTION_KEYS = {
     "Pick":[1,1,1,1,1,1,1,2,2,3,3,4,4,5,5,5,5,4,4,3,3,2,2,1,1],
-    "NagePick":[1,1,1,2,2,3,3,4,4,5,5,5,5,4,4,3,3,2,2,1,1]
+    "NagePick":[1,1,1,1,1,2,2,3,3,4,4,5,5,5,5,4,4,3,3,2,2,1,1]
 }
-nagepick_list = []
+NagePick_list = []
 npc_frogs_list = []
 splash_list = []
 splash_paints_list = []
@@ -401,7 +401,7 @@ class NagePick:
             if f:
                 self.moving = False
             if not (-200-128 <= self.posX <= 200+128 and -200-128 <= self.posY <= 200+128):
-                nagepick_list.remove(self)
+                NagePick_list.remove(self)
     def draw(self):
         ww = 1
         hw = 1
@@ -1168,7 +1168,7 @@ class Mudfrog_Player(Mudfrog):
                     self.jumpstandby(math.floor(min(45,self.jumpchargecount)/15))
             else:
                 self.gaprev()
-            for i in [*attack_list,*[iii for iii in nagepick_list if iii.moving]]:
+            for i in [*attack_list,*[iii for iii in NagePick_list if iii.moving]]:
                 if check_objscross(self,i):
                     self.alive = False
 
@@ -1631,14 +1631,14 @@ class Sunraku:
                         stone_list.append(Stone1(self))
                     attack_list.remove(a)
         elif self.now_motion == "NagePick":
-            if self.motion_count > 20:
+            if self.motion_count > 22:
                 self.stm -= 20
                 self.motion_count = 0
                 self.now_motion = "None"
                 self.equip = "Pick"
                 self.flags["armschange"] = 3
-            if self.motion_count == 10:
-                nagepick_list.append(NagePick(self))
+            if self.motion_count == 12:
+                NagePick_list.append(NagePick(self))
                 self.equip = "None"
 
     def draw(self):
@@ -1686,7 +1686,7 @@ class App:
         stone_list.clear()
         stone_col_list.clear()
         attack_list.clear()
-        nagepick_list.clear()
+        NagePick_list.clear()
         scoretext_list.clear()
         self.scene_changed_frame = 0
         self.aether = Aether(self)
@@ -1770,7 +1770,7 @@ class App:
                     scoretext_list.remove(i)
                 else:
                     i.update()
-            for i in nagepick_list:
+            for i in NagePick_list:
                 i.update()
             for i in wave_list:
                 if i.alive:
@@ -1817,7 +1817,7 @@ class App:
         for s in [self.player,* npc_frogs_list]:
             s.shade.draw()
         d_spl_list = []
-        for e in sorted([self.player,*splash_list,*npc_frogs_list,self.sunraku,*rock_list,*stone_list,*nagepick_list,*scoretext_list],key=lambda o:o.posY+o.posZ):
+        for e in sorted([self.player,*splash_list,*npc_frogs_list,self.sunraku,*rock_list,*stone_list,*NagePick_list,*scoretext_list],key=lambda o:o.posY+o.posZ):
             if e.__class__.__name__ == "Splash":
                 e.bord_draw()
                 d_spl_list.append(e)
@@ -1832,7 +1832,7 @@ class App:
                 ee.draw()
             d_spl_list = []
         if ATARIHANTEIMODE:
-            for i in [*splash_list, *collisions_list,*stone_col_list,*attack_list,*nagepick_list]:
+            for i in [*splash_list, *collisions_list,*stone_col_list,*attack_list,*NagePick_list]:
                 f = False
                 if ATARIHANTEIMODE_NEARSTRONG:
                     f = check_objsnear(i,self.player)
