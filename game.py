@@ -364,7 +364,7 @@ def gettileonpos(obj):
     if getgridpos(obj.posX)<0 or getgridpos(obj.posY)<0:
         return 1004
     else:
-        return pyxel.tilemap(0).get(getgridpos(obj.posX),getgridpos(obj.posY))
+        return pyxel.tilemap(0).pget(getgridpos(obj.posX),getgridpos(obj.posY))
 
 def drawhitbox(obj,app):
     for i in getrectbyobj(obj):
@@ -1157,7 +1157,7 @@ class Mudfrog_Player(Mudfrog):
                 elif self.parent.mousemoved:
                     self.degonjump = math.floor(((math.degrees(math.atan2(self.posY-pyxel.mouse_y-self.posZ-self.parent.scrollY,  self.posX-pyxel.mouse_x-self.parent.scrollX))+360+360-90+22.5)%360)/45)*45
             super().update()
-            if pyxel.btn(pyxel.KEY_SPACE) or pyxel.btn(pyxel.MOUSE_LEFT_BUTTON) and self.parent.scene != SCENE_TITLE :
+            if pyxel.btn(pyxel.KEY_SPACE) or pyxel.btn(pyxel.MOUSE_BUTTON_LEFT) and self.parent.scene != SCENE_TITLE :
                 self.gotojumping = True
                 self.jumpchargecount += 1
             elif not self.jumping:
@@ -1672,7 +1672,8 @@ class Sunraku:
 
 class App:
     def __init__(self):
-        pyxel.init(230, 230,palette=PALETTE)
+        pyxel.init(230, 230)
+        pyxel.colors.from_list(PALETTE)
         pyxel.load("assets/main.pyxres")
         self.initer()
         pyxel.run(self.update, self.draw)
@@ -1792,15 +1793,15 @@ class App:
             l = pyxel.frame_count-self.scene_changed_frame
             if l >= 40:
                 if pyxel.width/2-len("G A M E  O V E R")*4 <= pyxel.mouse_x <= pyxel.width/2-len("G A M E  O V E R")*4  +len("TWEET")*4 and  90<= pyxel.mouse_y <= 96:
-                    if pyxel.btnp(pyxel.MOUSE_LEFT_BUTTON):
+                    if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
                         openw(
                             "https://twitter.com/intent/tweet?text=" + quote_plus("SCORE:".upper()+str(self.score)+"\nTIME:"+str(self.long)+"\n#MudFrog_Dorojiai\nhttps://github.com/AlageZ/Dorojiai/releases/"))
             if l >= 50:
                 if pyxel.width/2-len("G A M E  O V E R")*4 <= pyxel.mouse_x <= pyxel.width/2-len("G A M E  O V E R")*4+len("RETRY")*4 and  110<= pyxel.mouse_y <= 116:
-                    if pyxel.btnp(pyxel.MOUSE_LEFT_BUTTON):
+                    if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
                         self.initer()
 
-        if self.scene == SCENE_TITLE and (pyxel.btnp(pyxel.MOUSE_LEFT_BUTTON) or pyxel.btnp(pyxel.KEY_SPACE)):
+        if self.scene == SCENE_TITLE and (pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) or pyxel.btnp(pyxel.KEY_SPACE)):
             self.scene = SCENE_GAME
             self.scene_changed_frame = pyxel.frame_count+0
         if not self.player.alive and self.scene == SCENE_GAME:
@@ -1811,7 +1812,7 @@ class App:
 
     def draw(self):
         pyxel.cls(15)
-        pyxel.bltm(-200-self.scrollX,-200-self.scrollY,0,0,0,50,50,3)
+        pyxel.bltm(-200-self.scrollX,-200-self.scrollY,0,0,0,400,400,3)
         for i in splash_paints_list:
             i.draw()
         for s in [self.player,* npc_frogs_list]:
